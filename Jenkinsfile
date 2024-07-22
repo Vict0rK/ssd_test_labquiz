@@ -2,20 +2,22 @@ pipeline {
     agent none
 
     stages {
-        stage('OWASP Dependency-Check Vulnerabilities') {
-            agent any
-            steps {
-                dependencyCheck additionalArguments: '''
-                    -o './'
-                    -s './'
-                    -f 'ALL'
-                    --prettyPrint''', 
-                odcInstallation: 'OWASP Dependency Check'
-                
-                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-            }
-        }
-
+		parallel{
+		stage('OWASP Dependency-Check Vulnerabilities') {
+					agent any
+					steps {
+						dependencyCheck additionalArguments: '''
+							-o './'
+							-s './'
+							-f 'ALL'
+							--prettyPrint''', 
+						odcInstallation: 'OWASP Dependency Check'
+						
+						dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+					}
+				}
+		}
+      
         stage('Integration UI Test') {
             parallel {
                 stage('Deploy') {
