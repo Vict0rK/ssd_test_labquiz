@@ -109,6 +109,8 @@ pipeline {
             agent {
                 docker {
                     image 'composer:latest'
+                    args '--entrypoint=""'
+
                 }
             }
             steps {
@@ -120,6 +122,8 @@ pipeline {
             agent {
                 docker {
                     image 'composer:latest'
+                    args '--entrypoint=""'
+
                 }
             }
             steps {
