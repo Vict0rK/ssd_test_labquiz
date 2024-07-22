@@ -2,7 +2,7 @@ pipeline {
     agent none
 
     stages {
-        stage('OWASP Dependency-Check Vulnerabilities') {
+        stage('OWASP Dependency-Check Vulnerabilities Lab 6') {
             agent any
             steps {
                 dependencyCheck additionalArguments: '''
@@ -16,7 +16,7 @@ pipeline {
             }
         }
 		
-		stage('Next Generation Warning Plugin') {
+		stage('Next Generation Warning Plugin Lab 7b') {
 			agent any 
 			steps{
 				git branch: 'main', url: 'https://github.com/Vict0rK/ssd_test_labquiz.git'
@@ -24,7 +24,21 @@ pipeline {
 				sh '/var/jenkins_home/apache-maven-3.9.8/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
 
 			}
+			post {
+				always {
+				junit testResults: '**/target/surefire-reports/TEST-*.xml'
 
+				recordIssues(enabledForFailure: true, tools: [
+					mavenConsole(),
+					java(),
+					javaDoc()
+				])
+				recordIssues(enabledForFailure: true, tool: checkStyle())
+				recordIssues(enabledForFailure: true, tool: spotBugs(pattern: '**/target/findbugsXml.xml'))
+				recordIssues(enabledForFailure: true, tool: cpd(pattern: '**/target/cpd.xml'))
+				recordIssues(enabledForFailure: true, tool: pmdParser(pattern: '**/target/pmd.xml'))
+				}
+			}
 		}
 
         stage('Integration UI Test') {
