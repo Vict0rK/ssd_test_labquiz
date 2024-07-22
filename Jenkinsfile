@@ -16,30 +16,30 @@ pipeline {
             }
         }
 		
-		// stage('Next Generation Warning Plugin Lab 8') {
-		// 	agent any 
-		// 	steps{
-		// 		git branch: 'main', url: 'https://github.com/Vict0rK/ssd_test_labquiz.git'
-		// 		sh '/var/jenkins_home/apache-maven-3.9.8/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
-		// 		sh '/var/jenkins_home/apache-maven-3.9.8/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
+		stage('Next Generation Warning Plugin Lab 8') {
+			agent any 
+			steps{
+				git branch: 'main', url: 'https://github.com/Vict0rK/ssd_test_labquiz.git'
+				sh '/var/jenkins_home/apache-maven-3.9.8/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
+				sh '/var/jenkins_home/apache-maven-3.9.8/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
 
-		// 	}
-		// 	post {
-		// 		always {
-		// 		junit testResults: '**/target/surefire-reports/TEST-*.xml'
+			}
+			post {
+				always {
+				junit testResults: '**/target/surefire-reports/TEST-*.xml'
 
-		// 		recordIssues(enabledForFailure: true, tools: [
-		// 			mavenConsole(),
-		// 			java(),
-		// 			javaDoc()
-		// 		])
-		// 		recordIssues(enabledForFailure: true, tool: checkStyle())
-		// 		recordIssues(enabledForFailure: true, tool: spotBugs(pattern: '**/target/findbugsXml.xml'))
-		// 		recordIssues(enabledForFailure: true, tool: cpd(pattern: '**/target/cpd.xml'))
-		// 		recordIssues(enabledForFailure: true, tool: pmdParser(pattern: '**/target/pmd.xml'))
-		// 		}
-		// 	}
-		// }
+				recordIssues(enabledForFailure: true, tools: [
+					mavenConsole(),
+					java(),
+					javaDoc()
+				])
+				recordIssues(enabledForFailure: true, tool: checkStyle())
+				recordIssues(enabledForFailure: true, tool: spotBugs(pattern: '**/target/findbugsXml.xml'))
+				recordIssues(enabledForFailure: true, tool: cpd(pattern: '**/target/cpd.xml'))
+				recordIssues(enabledForFailure: true, tool: pmdParser(pattern: '**/target/pmd.xml'))
+				}
+			}
+		}
 
 		stage('SonarQube Analysis Lab 9'){
 			agent any
