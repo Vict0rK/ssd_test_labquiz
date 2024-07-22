@@ -2,22 +2,31 @@ pipeline {
     agent none
 
     stages {
-		parallel{
-		stage('OWASP Dependency-Check Vulnerabilities') {
-					agent any
-					steps {
-						dependencyCheck additionalArguments: '''
-							-o './'
-							-s './'
-							-f 'ALL'
-							--prettyPrint''', 
-						odcInstallation: 'OWASP Dependency Check'
-						
-						dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-					}
-				}
+        stage('OWASP Dependency-Check Vulnerabilities') {
+            agent any
+            steps {
+                dependencyCheck additionalArguments: '''
+                    -o './'
+                    -s './'
+                    -f 'ALL'
+                    --prettyPrint''', 
+                odcInstallation: 'OWASP Dependency Check'
+                
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+            }
+        }
+		
+		stage('Next Generation Warning Plugin') {
+			agent any 
+			steps{
+				git branch: 'main', url: 'https://github.com/Vict0rK/ssd_test_labquiz.git'
+				sh '/var/jenkins_home/apache-maven-3.9.8/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
+				sh '/var/jenkins_home/apache-maven-3.9.8/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
+
+			}
+
 		}
-      
+
         stage('Integration UI Test') {
             parallel {
                 stage('Deploy') {
