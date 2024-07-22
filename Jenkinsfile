@@ -111,11 +111,13 @@ pipeline {
                         sh 'composer install'
                     }
                 }
-                stage('Test') {
-                    steps {
-                        sh './vendor/bin/phpunit --log-junit logs/unitreport.xml -c tests/phpunit.xml tests'
-                    }
-                }
+                // if you want to include this, you need to create the phpunit in a test folder (refer to 7a's repo)
+                // stage('Test') {
+                //     steps {
+                //         sh './vendor/bin/phpunit --log-junit logs/unitreport.xml -c tests/phpunit.xml tests'
+                //     }
+                // }
+            }
         }
     }
 }
