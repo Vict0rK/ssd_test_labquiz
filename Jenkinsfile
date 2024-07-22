@@ -16,7 +16,7 @@ pipeline {
             }
         }
 		
-		stage('Next Generation Warning Plugin Lab 7b') {
+		stage('Next Generation Warning Plugin Lab 8') {
 			agent any 
 			steps{
 				git branch: 'main', url: 'https://github.com/Vict0rK/ssd_test_labquiz.git'
@@ -41,7 +41,34 @@ pipeline {
 			}
 		}
 
-        stage('Integration UI Test') {
+		stage('SonarQube Analysis Lab 9'){
+			agent any
+			steps{
+				git branch: 'main', url: 'https://github.com/Vict0rK/ssd_test_labquiz.git'
+				script {
+                    // Define the SonarQube scanner tool
+                    def scannerHome = tool 'SonarQube'
+
+                    // Run the SonarQube scanner
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=OWASP \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://192.168.10.142:9000 \
+                        -Dsonar.token=sqp_e0288076aa1977cdcfe6445723aeef2080c2b8c8
+                        """
+                    }
+                }
+			}
+			post {
+				always {
+					recordIssues enabledForFailure: true, tool: sonarQube()
+				}
+			}
+		}
+
+        stage('Integration UI Test Lab 7b') {
             parallel {
                 stage('Deploy') {
                     agent any
