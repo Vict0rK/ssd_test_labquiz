@@ -55,7 +55,7 @@ pipeline {
                         ${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey=OWASP \
                         -Dsonar.sources=. \
-                        -Dsonar.host.url=http://192.168.10.142:9000 \
+                        -Dsonar.host.url=http://192.168.6.53:9000 \
                         -Dsonar.token=sqp_9825b4abf7bb1922a8224832734876643f080194
                         """
                     }
